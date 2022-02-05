@@ -6,6 +6,6 @@ from sklearn_app.sklearn_app_stack import SklearnAppStack
 
 
 app = cdk.App()
-SklearnAppStack(app, "aws-lambda-sklearn-cdk")
+SklearnAppStack(app, "sklearn-app-cdk")
 
 app.synth()

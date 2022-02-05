@@ -1,26 +1,33 @@
 from constructs import Construct
 from aws_cdk import (
-    Duration,
     Stack,
-    aws_iam as iam,
-    aws_sqs as sqs,
-    aws_sns as sns,
-    aws_sns_subscriptions as subs,
+    aws_lambda as lambda_,
+    aws_apigateway as apigw,
 )
 
 
 class SklearnAppStack(Stack):
-
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        queue = sqs.Queue(
-            self, "AwsLambdaSklearnCdkQueue",
-            visibility_timeout=Duration.seconds(300),
+        sklearn_layer = lambda_.LayerVersion(
+            self,
+            "SklearnLambdaLayerCdk",
+            code=lambda_.Code.from_asset("./lambda/layers/SklearnLayer.zip"),
+            compatible_runtimes=[lambda_.Runtime.PYTHON_3_8],
         )
 
-        topic = sns.Topic(
-            self, "AwsLambdaSklearnCdkTopic"
+        lambda_function = lambda_.Function(
+            self,
+            "SklearnLambdaCdk",
+            runtime=lambda_.Runtime.PYTHON_3_8,
+            code=lambda_.Code.from_asset("./lambda/code"),
+            handler="lambda_function.lambda_handler",
+            layers=[sklearn_layer],
         )
 
-        topic.add_subscription(subs.SqsSubscription(queue))
+        apigw.LambdaRestApi(
+            self,
+            "ApiGatewayCdk",
+            handler=lambda_function,
+        )
