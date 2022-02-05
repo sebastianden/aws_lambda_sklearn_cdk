@@ -2,10 +2,10 @@
 
 import aws_cdk as cdk
 
-from aws_lambda_sklearn_cdk.aws_lambda_sklearn_cdk_stack import AwsLambdaSklearnCdkStack
+from sklearn_app.sklearn_app_stack import SklearnAppStack
 
 
 app = cdk.App()
-AwsLambdaSklearnCdkStack(app, "aws-lambda-sklearn-cdk")
+SklearnAppStack(app, "aws-lambda-sklearn-cdk")
 
 app.synth()

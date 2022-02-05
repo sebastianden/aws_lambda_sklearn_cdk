@@ -1,11 +1,11 @@
 import aws_cdk as core
 import aws_cdk.assertions as assertions
-from aws_lambda_sklearn_cdk.aws_lambda_sklearn_cdk_stack import AwsLambdaSklearnCdkStack
+from sklearn_app.sklearn_app_stack import SklearnAppStack
 
 
 def test_sqs_queue_created():
     app = core.App()
-    stack = AwsLambdaSklearnCdkStack(app, "aws-lambda-sklearn-cdk")
+    stack = SklearnAppStack(app, "aws-lambda-sklearn-cdk")
     template = assertions.Template.from_stack(stack)
 
     template.has_resource_properties("AWS::SQS::Queue", {
@@ -15,7 +15,7 @@ def test_sqs_queue_created():
 
 def test_sns_topic_created():
     app = core.App()
-    stack = AwsLambdaSklearnCdkStack(app, "aws-lambda-sklearn-cdk")
+    stack = SklearnAppStack(app, "aws-lambda-sklearn-cdk")
     template = assertions.Template.from_stack(stack)
 
     template.resource_count_is("AWS::SNS::Topic", 1)
